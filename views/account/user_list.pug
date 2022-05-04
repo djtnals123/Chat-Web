@@ -1,0 +1,28 @@
+extends ../layout
+block content
+    include ../navbar/navbar.pug
+    h1= title
+    .container.my-3
+        .row.justify-content-center
+            each u in userList
+                .card.border-dark.mx-1.my-1.col-3
+                    .card-body
+                        h5.card-title ID
+                        p.card-text #{u.username}
+                        h5.card-title 가입 날짜
+                        p.card-text #{u.createdAt}
+                        h5.card-title 친구 수
+                        p.card-text #{u.friends.length} 
+
+                    .d-flex.justify-content-end.py-2
+                        if !(u.friends.some(friend => friend.friendId === user.id)) && !(u.receivedFriendRequests.some(fr => user.id === fr.senderId))
+                            input.btn.btn-outline-dark.mx-1(id=`fr${u.id}` type='button' value="친구 요청" onclick=`friendRequest(${u.id})`)
+                        if (u.followers.some(follower => follower.followerId === user.id))
+                            button.btn.btn-outline-dark.mx-1(id=`f${u.id}` type='button' onclick=`unfollow(${u.id})`) 언팔로우
+                        else
+                            button.btn.btn-outline-dark.mx-1(id=`f${u.id}` type='button' onclick=`follow(${u.id})`) 팔로우
+    
+    script(src="https://code.jquery.com/jquery-3.6.0.min.js") 
+    script(src='/js/follow.js') 
+    script(src='/js/friend.js') 
+

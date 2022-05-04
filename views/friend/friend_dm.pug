@@ -1,0 +1,54 @@
+extends ../layout
+block content
+  include ../navbar/navbar
+  
+  form
+    .container.my-3
+      .row.justify-content-center
+        .card.border-dark.col-3
+          .card-header.bg-transparent.border-dark.my-2
+            h5.card-title #{friend.username}
+          .card-body(style='overflow:auto; height:250px')
+            ul#messages
+          .card-footer.bg-transparent.border-dark 
+            input.form-control#m(type='textbox' placeholder="채팅 내용을 입력해 주세요." autocomplete='off')
+
+  style().
+    ul{
+      list-style:none;
+      padding-left:0px;
+    }
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js") 
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js')
+  script(type='text/javascript').
+    $(() => {
+      const socket = io.connect('localhost:3000', {
+        path: '/socket.io',
+        transports: ['websocket']
+      });
+      socket.emit('joinDM', #{user.id}, #{friend.id});
+      $('#exit').click(() => {
+        socket.emit('leaveDM', #{user.id}, #{friend.id});
+        location.href='/friend'
+      });
+      $('form').submit(() => {
+        socket.emit('chat DM', #{user.id}, #{friend.id}, $('#m').val(), '#{user.username}');
+        $('#m').val('');
+        return false;
+      });
+      $("#m input[type=text]").keypress(function(e) { 
+        if (e.keyCode == 13){
+            $('form').submit();
+        }    
+      });
+      socket.on('chat DM', (name, msg) => {
+        $('#messages').append($('<li>').text(name + '  :  ' + msg));
+        $(".card-body").scrollTop($(".card-body")[0].scrollHeight); 
+      });
+      socket.on('init DM', (dmList) => {
+        for(dm of dmList) {
+          $('#messages').append($('<li>').text(dm.sender.username + '  :  ' + dm.message));
+        }
+        $(".card-body").scrollTop($(".card-body")[0].scrollHeight); 
+      });
+    });

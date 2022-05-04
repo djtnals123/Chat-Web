@@ -1,0 +1,93 @@
+extends ../layout
+block content
+  include ../navbar/navbar.pug
+  form
+    .container.my-3
+      .row.justify-content-center
+        .card.border-dark.col-3.mx-1
+          .card-header.bg-transparent.border-dark.my-2
+            h5.card-title 방 번호: #{room.number}
+          .card-body
+            ul#messages
+          .card-footer.bg-transparent.border-dark 
+            input.form-control#m(type='textbox' placeholder="채팅 내용을 입력해 주세요." autocomplete='off')
+        .card.border-dark.col-2.mx-1
+          .card-header.bg-transparent.border-dark.my-2
+            h5.card-title 유저 목록 
+          .card-body
+            ul#users
+          .card-footer.bg-transparent.border-dark 
+            h5#count 현재 인원: #{room.count + 1}
+      .row.justify-content-center.my-3
+        input.btn.btn-outline-dark.col-2#exit(type='button' value="나가기")
+
+  style().
+    ul{
+      list-style:none;
+      padding-left:0px;
+    }
+
+    .card-body{
+      overflow:auto; 
+      height:250px
+    }
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js") 
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js')
+  script(type='text/javascript').
+    var count = #{room.count};
+    var users = [];
+    $(() => {
+      const socket = io.connect('localhost:3000', {
+        path: '/socket.io', 
+        transports: ['websocket'] 
+      });
+      socket.emit('joinRoom', #{room.number}-1, '#{user.username}');
+      $('#exit').click(() => {
+        socket.emit('leaveRoom', #{room.number}-1, '#{user.username}');
+        location.href='/room'
+      });
+      $('form').submit(() => {
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      $("#m input[type=text]").keypress(function(e) { 
+        if (e.keyCode == 13){
+            $('form').submit();
+        }    
+      });
+      socket.on('chat message', (name, msg) => {
+        $('#messages').append($('<li>').text(name + '  :  ' + msg));
+        $(".card-body").scrollTop($(".card-body")[0].scrollHeight); 
+      });
+      socket.on('leaveRoom', (num, name) => {
+        $('#messages').append($('<li>').text(name + '    leaved #{room.name} :('));
+        i = users.indexOf(name);
+        users.splice(i, 1);
+        if(!users.includes(name)) {
+          $(`#${name}`).remove();
+          count--;
+        }
+        $('#count').text ('현재 인원: ' + count);
+        $(".card-body").scrollTop($(".card-body")[0].scrollHeight); 
+      });
+      socket.on('joinRoom', (num, name) => {
+        $('#messages').append($('<li>').text(name + '    joined #{room.name} :)'));
+        if(!users.includes(name)) {
+          $('#users').append($(`<li id='${name}'>`).text(name));
+          count++;
+        } 
+        users.push(name);
+        $('#count').text('현재 인원: ' + count);
+        $(".card-body").scrollTop($(".card-body")[0].scrollHeight); 
+      });
+      socket.on('initUserList', (userList) => {
+        const userSet = new Set(userList);
+        users = userList
+        count = userSet.size;
+        for(u of new Set(userList)){
+          $('#users').append($(`<li id='${u}'>`).text(u));
+        }
+        $(".card-body").scrollTop($(".card-body")[0].scrollHeight); 
+      });
+    });

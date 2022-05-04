@@ -1,0 +1,18 @@
+extends ../layout
+block content
+  include ../navbar/navbar.pug
+  h1= title
+  .container.my-3
+    .row.justify-content-center
+      each room in roomList
+        .card.border-dark.mx-1.my-1.col-3
+          .card-body
+            h5.card-title 참여자 인원수
+            p.card-text #{room.count}
+            h5.card-title 방 번호
+            p.card-text #{room.number}
+          .d-flex.justify-content-end.py-2
+            input.btn.btn-outline-dark(type='button' value="입장" onclick=`location.href='/room/${room.number}'`)
+            
+  
+  script(src="https://code.jquery.com/jquery-3.6.0.min.js") 

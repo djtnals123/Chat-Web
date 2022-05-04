@@ -1,0 +1,30 @@
+extends ../layout
+block content
+    include ../navbar/navbar.pug
+    .container.my-3
+        .row.justify-content-center
+            each f in friends
+                .card.border-dark.mx-1.my-1.col-3
+                    .card-body
+                        h5.card-title ID
+                        p.card-text #{f.friend.username}
+                        h5.card-title 가입 날짜
+                        p.card-text #{f.friend.createdAt}
+                    .d-flex.justify-content-end.py-2
+                        button.btn.btn-outline-dark.mx-1(type='button' onclick=`deleteFriend(${f.friend.id})`) 친구 삭제
+                        button.btn.btn-outline-dark.mx-1(type='button' onclick=`location.href='/friend/DM/${f.friend.id}'`) DM
+                        if (f.friend.followers.some(follower => follower.followerId === user.id))
+                            button.btn.btn-outline-dark.mx-1(id=`f${f.friend.id}` type='button' onclick=`unfollow(${f.friend.id})`) 언팔로우
+                        else
+                            button.btn.btn-outline-dark.mx-1(id=`f${f.friend.id}` type='button' onclick=`follow(${f.friend.id})`) 팔로우
+
+    form(method="post" action="/friend/delete")
+        input(type="hidden" name="userId" id="userId")
+  
+    script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+    script(src='/js/follow.js')
+    script(type='text/javascript').
+        function deleteFriend(id) {
+            $('#userId').attr('value', id);
+            $('form').submit();
+        }

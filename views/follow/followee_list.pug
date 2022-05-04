@@ -1,0 +1,21 @@
+extends ../layout
+block content
+    include ../navbar/navbar.pug
+
+    .container.my-3
+        .row.justify-content-center
+            each f in followees
+                .card.border-dark.mx-1.my-1.col-3(id=`f${f.followee.id}`)
+                    .card-body
+                        h5.card-title ID
+                        p.card-text #{f.followee.username}
+                        h5.card-title 가입 날짜
+                        p.card-text #{f.followee.createdAt}
+                    .d-flex.justify-content-end.py-2
+                        button.btn.btn-outline-dark.mx-1(id=`f${f.followee.id}` type='button' onclick=`unfollow(${f.followee.id}, true)`) 언팔로우
+                        if !(f.followee.friends.some(friend => friend.friendId === user.id)) && !(f.followee.receivedFriendRequests.some(fr => user.id === fr.senderId))
+                            input.btn.btn-outline-dark.mx-1(id=`fr${f.followee.id}` type='button' value="친구 요청" onclick=`friendRequest(${f.followee.id})`)
+  
+    script(src="https://code.jquery.com/jquery-3.6.0.min.js") 
+    script(src='/js/follow.js')
+    script(src='/js/friend.js') 

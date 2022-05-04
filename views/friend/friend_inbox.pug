@@ -1,0 +1,23 @@
+extends ../layout
+block content
+    include ../navbar/navbar.pug
+    .container.my-3
+        .row.justify-content-center
+            each rq in inbox 
+                .card.border-dark.mx-1.my-1.col-3
+                    .card-body
+                        h5.card-title ID
+                        p.card-text #{rq.sender.username}
+                        h5.card-title 가입 날짜
+                        p.card-text #{rq.sender.createdAt}
+                        h5.card-title 친구 수
+                        p.card-text #{rq.sender.friends.length}
+                    .d-flex.justify-content-end.py-2
+                        input.btn.btn-outline-dark.mx-1(type='button' value="수락" onclick=`acceptRequest(${rq.sender.id})`)
+                        input.btn.btn-outline-dark.mx-1(type='button' value="거절" onclick=`refusRequest(${rq.sender.id})`)
+
+    form(method="post", action='', id='frm')
+        input#userId(type="hidden" value='' name='userId' )
+  
+    script(src="https://code.jquery.com/jquery-3.6.0.min.js") 
+    script(src='/js/friend-inbox.js')

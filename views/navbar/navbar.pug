@@ -1,0 +1,29 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  .container-fluid
+    a.navbar-brand(href='#') Sumin
+    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarNavDropdown.collapse.navbar-collapse
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link.active(aria-current='page' href='/room') Rooms
+        li.nav-item
+          a.nav-link.active(aria-current='page' href='/account') Users
+        li.nav-item.dropdown
+          a#navbarDropdownMenuLink.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+            | Friends
+          ul.dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+            li
+              a.dropdown-item(href='/friend') List
+            li
+              a.dropdown-item(href='/friend/inbox') Inbox
+        li.nav-item.dropdown
+          a#navbarDropdownMenuLink.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false')
+            | Follow
+          ul.dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+            li
+              a.dropdown-item(href='/follow/followee') Following
+            li
+              a.dropdown-item(href='/follow/follower') Follower
+        li.nav-item
+          a.nav-link(href='/auth/logout') Logout
