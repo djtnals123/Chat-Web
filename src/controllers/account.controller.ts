@@ -1,4 +1,4 @@
-import { AccountService } from './../services/account.service';
+import { AccountService } from '../services/account.service';
 import { Service } from "typedi";
 import express from 'express';
 import { Account } from "../entites/account.entity";

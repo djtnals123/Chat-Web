@@ -34,7 +34,6 @@ function initSocket() {
                 roomToUsers[num] = [];
             roomToUsers[num].push(name);
             await socket.join(room[num]);
-            console.log(typeof(name));
             console.log(name + ' join a ' + room[num]);
             socket.emit('initUserList', roomToUsers[num]);
             io.to(room[num]).emit('joinRoom', num, name);
@@ -73,5 +72,6 @@ function initSocket() {
 }
 
 export {
-    initSocket
+    initSocket,
+    roomToUsers
 }

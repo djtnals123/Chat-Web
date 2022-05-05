@@ -1,4 +1,4 @@
-import { AccountController } from './../controllers/accounr.controller';
+import { AccountController } from '../controllers/account.controller';
 import express from 'express';
 import { verifyToken } from "../middleware/auth";
 import Container from "typedi";
