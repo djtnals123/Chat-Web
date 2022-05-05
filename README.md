@@ -18,5 +18,5 @@ docker-compose start
 - 서버 중단  
 docker-compose stop
 
-##### [컨테이너 및 볼륨 제거]
-- docker-compose down --volume
+- [컨테이너 및 볼륨 제거]
+docker-compose down --volume
