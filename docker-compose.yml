@@ -31,6 +31,8 @@ services:
       - DB_PASSWORD=$MYSQLDB_ROOT_PASSWORD
       - DB_NAME=$MYSQLDB_DATABASE
       - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - NODE_PORT=$NODE_DOCKER_PORT
+      - HTTP_PORT=$HTTP_DOCKER_PORT
     volumes:
       - ./:/app
     stdin_open: true

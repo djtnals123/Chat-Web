@@ -33,11 +33,14 @@ class App {
         routes.init();
         initSocket();
         
-        this.app.listen(8088, () => {
-            console.log('Started server with 8088');
+        const nodePort = process.env.NODE_PORT || 8088
+        const httpPort = process.env.HTTP_PORT || 3000
+
+        this.app.listen(nodePort, () => {
+            console.log(`Started server with ${nodePort}`);
         });​
-        this.httpServer.listen(3000, () => {
-            console.log('Started Http server with 3000');
+        this.httpServer.listen(httpPort, () => {
+            console.log(`Started Http server with ${httpPort}`);
         });
     }
 }
